@@ -6,9 +6,6 @@ import akka.testkit.{TestActorRef, TestKit}
 import com.akkademy.messages.SetRequest
 import org.scalatest.{Matchers, BeforeAndAfterAll, FunSpecLike}
 
-import scala.concurrent.Await
-import scala.concurrent.duration.Duration
-
 class AkkademyDBTest extends TestKit(ActorSystem("test-system")) with FunSpecLike with Matchers with BeforeAndAfterAll {
   describe("Given SetRequest") {
     it("should place key/value into internal storage") {
@@ -28,5 +25,6 @@ class AkkademyDBTest extends TestKit(ActorSystem("test-system")) with FunSpecLik
       expectMsgClass(classOf[Warning]).message.asInstanceOf[String] should include("received unexpected message")
     }
   }
-  override protected def afterAll(): Unit = Await.ready(system.terminate(), Duration.Inf)
+
+  override protected def afterAll(): Unit = TestKit.shutdownActorSystem(system)
 }
